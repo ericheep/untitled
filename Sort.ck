@@ -82,7 +82,15 @@ public class Sort {
     }
 
     fun int[] bubbleRecursive(int arr[], int n) {
+        for (0 => int i; i < n - 1; i++) {
+            if (arr[i] > arr[i + 1]) {
+                indexSwap(arr, i, i + 1);
+            }
+        }
 
+        if (n - 1 > 1) {
+            bubbleRecursive(arr, n - 1);
+        }
     }
 
     fun void indexSwap(int arr[], int a, int b) {
@@ -130,7 +138,7 @@ public class Sort {
 
 Sort s;
 // s.setInsert();
-s.setBubbleIterative();
+s.setBubbleRecursive();
 
 [0, 5, 2, 3, 7, 5] @=> int mixed[];
 
