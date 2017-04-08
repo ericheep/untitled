@@ -23,7 +23,7 @@ public class Sort {
             return insert(arr, n);
         }
         if (type == SELECTION) {
-
+            return selection(arr, n);
         }
         if (type == BUBBLE) {
 
@@ -50,6 +50,25 @@ public class Sort {
 
             value => arr[j];
         }
+    }
+
+    fun int[] selection(int arr[], int n) {
+        for (0 => int i; i < n - 1; i++) {
+            i => int min;
+
+            for (i + i => int j; j < n; j++) {
+                if (arr[j] < arr[min])
+                    j => min;
+            }
+
+            indexSwap(arr, min, i);
+        }
+    }
+
+    fun void indexSwap(int arr[], int a, int b) {
+        arr[a] => int temp;
+        arr[b] => arr[a];
+        temp => arr[b];
     }
 
     fun void setInsert() {
@@ -86,7 +105,8 @@ public class Sort {
 }
 
 Sort s;
-s.setInsert();
+// s.setInsert();
+s.setSelection();
 
 [0, 5, 2, 3, 7, 5] @=> int mixed[];
 
