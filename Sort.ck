@@ -6,12 +6,14 @@
 public class Sort {
 
     0 => int type;
+
     0 => int INSERT;
     1 => int SELECTION;
-    2 => int BUBBLE;
-    3 => int MERGE;
-    4 => int QUICK;
-    5 => int HEAP;
+    2 => int BUBBLE_ITERATIVE;
+    3 => int BUBBLE_RECURSIVE;
+    4 => int MERGE;
+    5 => int QUICK;
+    6 => int HEAP;
 
     fun int[] sort(int arr[]) {
         sort(arr, arr.size());
@@ -25,8 +27,11 @@ public class Sort {
         if (type == SELECTION) {
             return selection(arr, n);
         }
-        if (type == BUBBLE) {
-
+        if (type == BUBBLE_ITERATIVE) {
+            return bubbleIterative(arr, n);
+        }
+        if (type == BUBBLE_RECURSIVE) {
+            return bubbleRecursive(arr, n);
         }
         if (type == QUICK) {
 
@@ -65,6 +70,21 @@ public class Sort {
         }
     }
 
+    fun int[] bubbleIterative(int arr[], int n) {
+        for (0 => int i; i < n - 1; i++) {
+
+            for (0 => int j; j < n - 1 - i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    indexSwap(arr, j, j + 1);
+                }
+            }
+        }
+    }
+
+    fun int[] bubbleRecursive(int arr[], int n) {
+
+    }
+
     fun void indexSwap(int arr[], int a, int b) {
         arr[a] => int temp;
         arr[b] => arr[a];
@@ -79,8 +99,12 @@ public class Sort {
         SELECTION => type;
     }
 
-    fun void setBubble() {
-        BUBBLE => type;
+    fun void setBubbleIterative() {
+        BUBBLE_ITERATIVE => type;
+    }
+
+    fun void setBubbleRecursive() {
+        BUBBLE_RECURSIVE => type;
     }
 
     fun void setMerge() {
@@ -106,7 +130,7 @@ public class Sort {
 
 Sort s;
 // s.setInsert();
-s.setSelection();
+s.setBubbleIterative();
 
 [0, 5, 2, 3, 7, 5] @=> int mixed[];
 
