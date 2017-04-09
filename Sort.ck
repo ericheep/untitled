@@ -7,6 +7,7 @@ public class Sort {
 
     0 => int type;
 
+    // switch case thing
     0 => int INSERT;
     1 => int SELECTION;
     2 => int BUBBLE_ITERATIVE;
@@ -20,18 +21,24 @@ public class Sort {
     }
 
     fun int[] sort(int arr[], int n) {
-        // switch/case like thing
         if (type == INSERT) {
-            return insert(arr, n);
+            return insertSort(arr, n);
         }
         if (type == SELECTION) {
-            return selection(arr, n);
+            return selectionSort(arr, n);
         }
         if (type == BUBBLE_ITERATIVE) {
-            return bubbleIterative(arr, n);
+            return bubbleIterativeSort(arr, n);
         }
         if (type == BUBBLE_RECURSIVE) {
-            return bubbleRecursive(arr, n);
+            return bubbleRecursiveSort(arr, n);
+        }
+        if (type == MERGE) {
+            int aux[n];
+            for (0 => int i; i < n; i++) {
+                arr[i] => aux[i];
+            }
+            return mergeSort(arr, aux, 0, n - 1);
         }
         if (type == QUICK) {
 
@@ -42,7 +49,7 @@ public class Sort {
 
     }
 
-    fun int[] insert(int arr[], int n) {
+    fun int[] insertSort(int arr[], int n) {
         for (1 => int i; i < n; i++) {
 
             arr[i] => int value;
@@ -57,7 +64,7 @@ public class Sort {
         }
     }
 
-    fun int[] selection(int arr[], int n) {
+    fun int[] selectionSort(int arr[], int n) {
         for (0 => int i; i < n - 1; i++) {
             i => int min;
 
@@ -70,7 +77,7 @@ public class Sort {
         }
     }
 
-    fun int[] bubbleIterative(int arr[], int n) {
+    fun int[] bubbleIterativeSort(int arr[], int n) {
         for (0 => int i; i < n - 1; i++) {
 
             for (0 => int j; j < n - 1 - i; j++) {
@@ -81,7 +88,7 @@ public class Sort {
         }
     }
 
-    fun int[] bubbleRecursive(int arr[], int n) {
+    fun int[] bubbleRecursiveSort(int arr[], int n) {
         for (0 => int i; i < n - 1; i++) {
             if (arr[i] > arr[i + 1]) {
                 indexSwap(arr, i, i + 1);
@@ -89,7 +96,43 @@ public class Sort {
         }
 
         if (n - 1 > 1) {
-            bubbleRecursive(arr, n - 1);
+            bubbleRecursiveSort(arr, n - 1);
+        }
+    }
+
+    fun int[] mergeSort(int arr[], int aux[], int low, int high) {
+        if (high == low) {
+            return arr;
+        }
+
+        low + ((high - low) >> 1) => int mid;
+
+        mergeSort(arr, aux, low, mid);          // split / merge left  half
+        mergeSort(arr, aux, mid + 1, high);     // split / merge right half
+        merge(arr, aux, low, mid, high);        // merge the two half runs
+
+    }
+
+    fun int[] merge(int arr[], int aux[], int low, int mid, int high) {
+
+        low => int k;
+        low => int i;
+        mid + 1 => int j;
+
+        while (i <= mid && j <= high) {
+            if (arr[i] < arr[j]) {
+                arr[i++] => aux[k++];
+            } else {
+                arr[j++] => aux[k++];
+            }
+        }
+
+        while (i <= mid) {
+            arr[i++] => aux[k++];
+        }
+
+        for (low => int i; i <= high; i++) {
+            aux[i] => arr[i];
         }
     }
 
@@ -138,9 +181,9 @@ public class Sort {
 
 Sort s;
 // s.setInsert();
-s.setBubbleRecursive();
+s.setMerge();
 
-[0, 5, 2, 3, 7, 5] @=> int mixed[];
+[0, 5, 2, 3, 7] @=> int mixed[];
 
 s.sort(mixed);
 s.print(mixed);
