@@ -41,7 +41,7 @@ public class Sort {
             return mergeSort(arr, aux, 0, n - 1);
         }
         if (type == QUICK) {
-
+            return quickSort(arr, 0, n - 1);
         }
         if (type == HEAP) {
 
@@ -136,6 +136,32 @@ public class Sort {
         }
     }
 
+    fun int[] quickSort(int arr[], int start, int end) {
+        if (start >= end) {
+            return arr;
+        }
+
+        partition(arr, start, end) => int pivot;
+        quickSort(arr, start, pivot - 1);
+        quickSort(arr, pivot + 1, end);
+    }
+
+    fun int partition(int arr[], int start, int end) {
+        arr[end] => int pivot;
+        start => int pIndex;
+
+        for (start => int i; i < end; i++) {
+            if (arr[i] <= pivot) {
+                indexSwap(arr, i, pIndex);
+                pIndex++;
+            }
+
+        }
+        indexSwap(arr, pIndex, end);
+
+        return pIndex;
+    }
+
     fun void indexSwap(int arr[], int a, int b) {
         arr[a] => int temp;
         arr[b] => arr[a];
@@ -181,7 +207,8 @@ public class Sort {
 
 Sort s;
 // s.setInsert();
-s.setMerge();
+// s.setMerge();
+s.setQuick();
 
 [0, 5, 2, 3, 7] @=> int mixed[];
 
