@@ -16,40 +16,45 @@ public class Sort {
     5 => int QUICK;
     6 => int HEAP;
 
-    fun int[] sort(int arr[]) {
+    // for heap sort
+    0 => int end;
+
+    fun void sort(int arr[]) {
         sort(arr, arr.size());
     }
 
-    fun int[] sort(int arr[], int n) {
+    fun void sort(int arr[], int step) {
+        arr.size() => int n;
+
         if (type == INSERT) {
-            return insertSort(arr, n);
+            insertSort(arr, n);
         }
         if (type == SELECTION) {
-            return selectionSort(arr, n);
+            selectionSort(arr, n);
         }
         if (type == BUBBLE_ITERATIVE) {
-            return bubbleIterativeSort(arr, n);
+            bubbleIterativeSort(arr, n);
         }
         if (type == BUBBLE_RECURSIVE) {
-            return bubbleRecursiveSort(arr, n);
+            bubbleRecursiveSort(arr, n);
         }
         if (type == MERGE) {
             int aux[n];
             for (0 => int i; i < n; i++) {
                 arr[i] => aux[i];
             }
-            return mergeSort(arr, aux, 0, n - 1);
+            mergeSort(arr, aux, 0, n - 1);
         }
         if (type == QUICK) {
-            return quickSort(arr, 0, n - 1);
+            quickSort(arr, 0, n - 1);
         }
         if (type == HEAP) {
-
+            heapSort(arr, n);
         }
 
     }
 
-    fun int[] insertSort(int arr[], int n) {
+    fun void insertSort(int arr[], int n) {
         for (1 => int i; i < n; i++) {
 
             arr[i] => int value;
@@ -64,7 +69,7 @@ public class Sort {
         }
     }
 
-    fun int[] selectionSort(int arr[], int n) {
+    fun void selectionSort(int arr[], int n) {
         for (0 => int i; i < n - 1; i++) {
             i => int min;
 
@@ -77,7 +82,7 @@ public class Sort {
         }
     }
 
-    fun int[] bubbleIterativeSort(int arr[], int n) {
+    fun void bubbleIterativeSort(int arr[], int n) {
         for (0 => int i; i < n - 1; i++) {
 
             for (0 => int j; j < n - 1 - i; j++) {
@@ -88,7 +93,7 @@ public class Sort {
         }
     }
 
-    fun int[] bubbleRecursiveSort(int arr[], int n) {
+    fun void bubbleRecursiveSort(int arr[], int n) {
         for (0 => int i; i < n - 1; i++) {
             if (arr[i] > arr[i + 1]) {
                 indexSwap(arr, i, i + 1);
@@ -100,9 +105,9 @@ public class Sort {
         }
     }
 
-    fun int[] mergeSort(int arr[], int aux[], int low, int high) {
+    fun void mergeSort(int arr[], int aux[], int low, int high) {
         if (high == low) {
-            return arr;
+            return;
         }
 
         low + ((high - low) >> 1) => int mid;
@@ -113,7 +118,7 @@ public class Sort {
 
     }
 
-    fun int[] merge(int arr[], int aux[], int low, int mid, int high) {
+    fun void merge(int arr[], int aux[], int low, int mid, int high) {
 
         low => int k;
         low => int i;
@@ -136,14 +141,22 @@ public class Sort {
         }
     }
 
-    fun int[] quickSort(int arr[], int start, int end) {
+    fun void quickSort(int arr[], int start, int end) {
         if (start >= end) {
-            return arr;
+            return;
         }
 
         partition(arr, start, end) => int pivot;
         quickSort(arr, start, pivot - 1);
         quickSort(arr, pivot + 1, end);
+    }
+
+    fun int leftChild(int i) {
+        return (2 * i + 1);
+    }
+
+    fun int rightChild(int i) {
+        return (2 * i + 2);
     }
 
     fun int partition(int arr[], int start, int end) {
@@ -160,6 +173,43 @@ public class Sort {
         indexSwap(arr, pIndex, end);
 
         return pIndex;
+    }
+
+    fun void heapify(int arr[], int i) {
+        leftChild(i) => int left;
+        rightChild(i) => int right;
+
+        i => int largest;
+
+        if (left < end && arr[left] > arr[i]) {
+            left => largest;
+        }
+        if (right < end && arr[right] > arr[largest]) {
+            right => largest;
+        }
+        if (largest != i) {
+            indexSwap(arr, i, largest);
+            heapify(arr, largest);
+        }
+    }
+
+    fun void buildHeap(int arr[]) {
+        (end - 2) /2 => int i;
+        while (i >= 0) {
+            heapify(arr, i--);
+        }
+    }
+
+    fun void heapSort(int arr[], int n) {
+        n => end;
+
+        buildHeap(arr);
+
+        while (end != 1) {
+            indexSwap(arr, 0, end - 1);
+            end--;
+            heapify(arr, 0);
+        }
     }
 
     fun void indexSwap(int arr[], int a, int b) {
@@ -201,18 +251,17 @@ public class Sort {
             chout <= arr[i] + " ";
         }
         chout.flush();
+        chout <= "\n";
     }
 
 }
 
 Sort s;
-// s.setInsert();
-// s.setMerge();
-s.setQuick();
+s.setHeap();
 
-[0, 5, 2, 3, 7] @=> int mixed[];
+[0, 5, 2, 3, 1] @=> int mixed[];
 
-s.sort(mixed);
+s.sort(mixed, 5);
 s.print(mixed);
 
 
