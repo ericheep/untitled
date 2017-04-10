@@ -123,13 +123,17 @@ public class Sort {
             return;
         }
 
+        if (step == m_innerIteration) {
+            return;
+        }
+        m_innerIteration++;
+
         low + ((high - low) >> 1) => int mid;
 
         mergeSort(arr, aux, low, mid, step);          // split / merge left  half
         mergeSort(arr, aux, mid + 1, high, step);     // split / merge right half
+
         merge(arr, aux, low, mid, high);        // merge the two half runs
-        // if (checkStep(step)) return;
-        // print(arr);
     }
 
     fun void merge(int arr[], int aux[], int low, int mid, int high) {
@@ -159,7 +163,10 @@ public class Sort {
             return;
         }
 
-        if (checkStep(step)) return;
+        if (step == m_innerIteration) {
+            return;
+        }
+        m_innerIteration++;
 
         partition(arr, start, end) => int pivot;
         quickSort(arr, start, pivot - 1, step);
@@ -284,7 +291,7 @@ public class Sort {
 }
 
 Sort s;
-s.setMerge();
+s.setQuick();
 
 10 => int n;
 
