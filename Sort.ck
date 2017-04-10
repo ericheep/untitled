@@ -5,57 +5,79 @@
 
 public class Sort {
 
-    0 => int type;
+    0 => int m_type;
+    0 => int m_iteration;
+    0 => int m_innerIteration;
 
-    // switch case thing
+    // switch case
     0 => int INSERT;
     1 => int SELECTION;
-    2 => int BUBBLE_ITERATIVE;
-    3 => int BUBBLE_RECURSIVE;
-    4 => int MERGE;
-    5 => int QUICK;
-    6 => int HEAP;
+    2 => int BUBBLE;
+    3 => int MERGE;
+    4 => int QUICK;
+    5 => int HEAP;
 
     // for heap sort
     0 => int end;
 
-    fun void sort(int arr[]) {
-        sort(arr, arr.size());
+    fun void resetStep() {
+        0 => m_iteration;
+    }
+
+    fun void step(int arr[], int copy[]) {
+        arr.size() => int n;
+        for (0 => int i; i < n; i++) {
+            arr[i] => copy[i];
+        }
+        sort(copy, m_iteration);
+        m_iteration++;
+    }
+
+    fun int checkStep(int step) {
+        if (step == m_innerIteration) {
+            return true;
+        } else {
+            return false;
+        }
+        m_innerIteration++;
+    }
+
+    fun void sort(int arr[], int copy[]) {
+        sort(arr, -1);
     }
 
     fun void sort(int arr[], int step) {
         arr.size() => int n;
+        0 => m_innerIteration;
 
-        if (type == INSERT) {
-            insertSort(arr, n);
+        if (m_type == INSERT) {
+            insertSort(arr, n, step);
         }
-        if (type == SELECTION) {
-            selectionSort(arr, n);
+        if (m_type == SELECTION) {
+            selectionSort(arr, n, step);
         }
-        if (type == BUBBLE_ITERATIVE) {
-            bubbleIterativeSort(arr, n);
+        if (m_type == BUBBLE) {
+            bubbleSort(arr, n, step);
         }
-        if (type == BUBBLE_RECURSIVE) {
-            bubbleRecursiveSort(arr, n);
-        }
-        if (type == MERGE) {
+        if (m_type == MERGE) {
             int aux[n];
             for (0 => int i; i < n; i++) {
                 arr[i] => aux[i];
             }
-            mergeSort(arr, aux, 0, n - 1);
+            mergeSort(arr, aux, 0, n - 1, step);
         }
-        if (type == QUICK) {
-            quickSort(arr, 0, n - 1);
+        if (m_type == QUICK) {
+            quickSort(arr, 0, n - 1, step);
         }
-        if (type == HEAP) {
-            heapSort(arr, n);
+        if (m_type == HEAP) {
+            0 => end;
+            heapSort(arr, n, step);
         }
-
     }
 
-    fun void insertSort(int arr[], int n) {
+    fun void insertSort(int arr[], int n, int step) {
         for (1 => int i; i < n; i++) {
+            if (checkStep(step)) return;
 
             arr[i] => int value;
             i => int j;
@@ -69,21 +91,24 @@ public class Sort {
         }
     }
 
-    fun void selectionSort(int arr[], int n) {
+    fun void selectionSort(int arr[], int n, int step) {
         for (0 => int i; i < n - 1; i++) {
-            i => int min;
+            if (checkStep(step)) return;
 
-            for (i + i => int j; j < n; j++) {
-                if (arr[j] < arr[min])
+            i => int min;
+            for (i + 1 => int j; j < n; j++) {
+                if (arr[j] < arr[min]) {
                     j => min;
+                }
             }
 
             indexSwap(arr, min, i);
         }
     }
 
-    fun void bubbleIterativeSort(int arr[], int n) {
+    fun void bubbleSort(int arr[], int n, int step) {
         for (0 => int i; i < n - 1; i++) {
+            if (checkStep(step)) return;
 
             for (0 => int j; j < n - 1 - i; j++) {
                 if (arr[j] > arr[j + 1]) {
@@ -93,33 +118,21 @@ public class Sort {
         }
     }
 
-    fun void bubbleRecursiveSort(int arr[], int n) {
-        for (0 => int i; i < n - 1; i++) {
-            if (arr[i] > arr[i + 1]) {
-                indexSwap(arr, i, i + 1);
-            }
-        }
-
-        if (n - 1 > 1) {
-            bubbleRecursiveSort(arr, n - 1);
-        }
-    }
-
-    fun void mergeSort(int arr[], int aux[], int low, int high) {
+    fun void mergeSort(int arr[], int aux[], int low, int high, int step) {
         if (high == low) {
             return;
         }
 
         low + ((high - low) >> 1) => int mid;
 
-        mergeSort(arr, aux, low, mid);          // split / merge left  half
-        mergeSort(arr, aux, mid + 1, high);     // split / merge right half
+        mergeSort(arr, aux, low, mid, step);          // split / merge left  half
+        mergeSort(arr, aux, mid + 1, high, step);     // split / merge right half
         merge(arr, aux, low, mid, high);        // merge the two half runs
-
+        // if (checkStep(step)) return;
+        // print(arr);
     }
 
     fun void merge(int arr[], int aux[], int low, int mid, int high) {
-
         low => int k;
         low => int i;
         mid + 1 => int j;
@@ -141,14 +154,16 @@ public class Sort {
         }
     }
 
-    fun void quickSort(int arr[], int start, int end) {
+    fun void quickSort(int arr[], int start, int end, int step) {
         if (start >= end) {
             return;
         }
 
+        if (checkStep(step)) return;
+
         partition(arr, start, end) => int pivot;
-        quickSort(arr, start, pivot - 1);
-        quickSort(arr, pivot + 1, end);
+        quickSort(arr, start, pivot - 1, step);
+        quickSort(arr, pivot + 1, end, step);
     }
 
     fun int leftChild(int i) {
@@ -200,12 +215,17 @@ public class Sort {
         }
     }
 
-    fun void heapSort(int arr[], int n) {
+    fun void heapSort(int arr[], int n, int step) {
         n => end;
 
         buildHeap(arr);
 
         while (end != 1) {
+            if (step == m_innerIteration) {
+                return;
+            }
+            m_innerIteration++;
+
             indexSwap(arr, 0, end - 1);
             end--;
             heapify(arr, 0);
@@ -218,32 +238,39 @@ public class Sort {
         temp => arr[b];
     }
 
+    fun int isSorted(int arr[]) {
+        1 => int sorted;
+        for (0 => int i; i < arr.size() - 1; i++) {
+            if (arr[i] > arr[i + 1]) {
+                0 => sorted;
+                break;
+            }
+        }
+        return sorted;
+    }
+
     fun void setInsert() {
-        INSERT => type;
+        INSERT => m_type;
     }
 
     fun void setSelection() {
-        SELECTION => type;
+        SELECTION => m_type;
     }
 
-    fun void setBubbleIterative() {
-        BUBBLE_ITERATIVE => type;
-    }
-
-    fun void setBubbleRecursive() {
-        BUBBLE_RECURSIVE => type;
+    fun void setBubble() {
+        BUBBLE => m_type;
     }
 
     fun void setMerge() {
-        MERGE => type;
+        MERGE => m_type;
     }
 
     fun void setQuick() {
-        QUICK => type;
+        QUICK => m_type;
     }
 
     fun void setHeap() {
-        HEAP => type;
+        HEAP => m_type;
     }
 
     fun void print(int arr[]) {
@@ -257,11 +284,19 @@ public class Sort {
 }
 
 Sort s;
-s.setHeap();
+s.setMerge();
 
-[0, 5, 2, 3, 1] @=> int mixed[];
+10 => int n;
 
-s.sort(mixed, 5);
-s.print(mixed);
+int base[n];
+int mixed[n];
 
+for (0 => int i; i < n; i++) {
+    Math.random2(0, n) => base[i] => mixed[i];
+}
 
+while (!s.isSorted(mixed)) {
+    s.step(base, mixed);
+    s.print(mixed);
+    100::ms => now;
+}
