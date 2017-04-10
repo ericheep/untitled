@@ -33,15 +33,6 @@ public class Sort {
         m_iteration++;
     }
 
-    fun int checkStep(int step) {
-        if (step == m_innerIteration) {
-            return true;
-        } else {
-            return false;
-        }
-        m_innerIteration++;
-    }
-
     fun void sort(int arr[], int copy[]) {
         sort(arr, -1);
     }
@@ -77,7 +68,10 @@ public class Sort {
 
     fun void insertSort(int arr[], int n, int step) {
         for (1 => int i; i < n; i++) {
-            if (checkStep(step)) return;
+            if (step == m_innerIteration) {
+                return;
+            }
+            m_innerIteration++;
 
             arr[i] => int value;
             i => int j;
@@ -93,7 +87,10 @@ public class Sort {
 
     fun void selectionSort(int arr[], int n, int step) {
         for (0 => int i; i < n - 1; i++) {
-            if (checkStep(step)) return;
+            if (step == m_innerIteration) {
+                return;
+            }
+            m_innerIteration++;
 
             i => int min;
             for (i + 1 => int j; j < n; j++) {
@@ -108,7 +105,10 @@ public class Sort {
 
     fun void bubbleSort(int arr[], int n, int step) {
         for (0 => int i; i < n - 1; i++) {
-            if (checkStep(step)) return;
+            if (step == m_innerIteration) {
+                return;
+            }
+            m_innerIteration++;
 
             for (0 => int j; j < n - 1 - i; j++) {
                 if (arr[j] > arr[j + 1]) {
